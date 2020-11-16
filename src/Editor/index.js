@@ -305,11 +305,14 @@ export class Editor extends React.Component {
     this.setState({ selection: newSelc });
   };
 
-  formatMentionNode = (txt, key) => (
-    <Text key={key} style={styles.mention}>
-      {txt}
-    </Text>
-  );
+  formatMentionNode = (txt, key) => {
+    const { editorStyles = {} } = props
+    return (
+      <Text key={key} style={[styles.mention, editorStyles.mention]}>
+        {txt}
+      </Text>
+    )
+  }
 
   formatText(inputText) {
     /**
@@ -538,13 +541,13 @@ export class Editor extends React.Component {
             <View style={[{ height: this.state.editorHeight }]}>
               <View
                 style={[
-                  styles.formmatedTextWrapper,
+                  styles.formattedTextWrapper,
                   editorStyles.inputMaskTextWrapper
                 ]}
               >
                 {state.formattedText !== "" ? (
                   <Text
-                    style={[styles.formmatedText, editorStyles.inputMaskText]}
+                    style={[styles.formattedText, editorStyles.inputMaskText]}
                   >
                     {state.formattedText}
                   </Text>
@@ -569,7 +572,7 @@ export class Editor extends React.Component {
                 value={state.inputText}
                 onBlur={props.toggleEditor}
                 onChangeText={this.onChange}
-                selection={this.state.selection}
+                selection={Platform.OS === 'ios' ? this.state.selection : null}
                 selectionColor={"#000"}
                 onSelectionChange={this.handleSelectionChange}
                 placeholder={state.placeholder}

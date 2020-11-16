@@ -25,7 +25,7 @@ export default StyleSheet.create({
     alignSelf: "stretch",
     width: "100%"
   },
-  formmatedTextWrapper: {
+  formattedTextWrapper: {
     minHeight: 40,
     position: "absolute",
     top: 0,
@@ -33,12 +33,12 @@ export default StyleSheet.create({
     paddingVertical: 5,
     width: "100%"
   },
-  formmatedText: {
+  formattedText: {
     fontSize: 16,
     fontWeight: "400"
   },
   mention: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "400",
     backgroundColor: "rgba(36, 77, 201, 0.05)",
     color: "#244dc9"
