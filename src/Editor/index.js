@@ -51,7 +51,7 @@ export class Editor extends React.Component {
       textInputHeight: "",
       isTrackingStarted: false,
       suggestionRowHeight: new Animated.Value(0),
-      triggerLocation: "anywhere", //'new-words-only', //anywhere
+      triggerLocation: "new-words-only", //'new-words-only', //anywhere
       trigger: "@",
       selection: {
         start: 0,

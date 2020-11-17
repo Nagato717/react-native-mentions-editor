@@ -20,6 +20,7 @@ export const displayTextWithMentions = (inputText, formatMentionNode) => {
         formattedText.push(initialStr);
         const formattedMention = formatMentionNode(
           `@${men.username}`,
+          `${men.id}`,
           `${index}-${men.id}-${rowIndex}`
         );
         formattedText.push(formattedMention);
