@@ -26,7 +26,8 @@ export class Editor extends React.Component {
     onHideMentions: PropTypes.func,
     editorStyles: PropTypes.object,
     placeholder: PropTypes.string,
-    renderMentionList: PropTypes.func
+    renderMentionList: PropTypes.func,
+    onTapSuggestion: PropTypes.func
   };
 
   constructor(props) {
@@ -114,6 +115,7 @@ export class Editor extends React.Component {
 
   startTracking(menIndex) {
     this.isTrackingStarted = true;
+    this.openSuggestionsPanel();
     this.menIndex = menIndex;
     this.setState({
       keyword: "",
@@ -124,7 +126,7 @@ export class Editor extends React.Component {
 
   stopTracking() {
     this.isTrackingStarted = false;
-    // this.closeSuggestionsPanel();
+    this.closeSuggestionsPanel();
     this.setState({
       isTrackingStarted: false
     });
@@ -180,17 +182,26 @@ export class Editor extends React.Component {
     const menIndex = selection.start - 1;
     // const lastChar = inputText.substr(inputText.length - 1);
     const lastChar = inputText.substr(menIndex, 1);
-    const wordBoundry =
-      this.state.triggerLocation === "new-word-only"
-        ? this.previousChar.trim().length === 0
-        : true;
-    if (lastChar === this.state.trigger && wordBoundry) {
+    // const wordBoundry =
+    //   this.state.triggerLocation === "new-word-only"
+    //     ? this.previousChar.trim().length === 0
+    //     : true;
+    // if (lastChar === this.state.trigger && wordBoundry) {
+    //   this.startTracking(menIndex);
+    // } else if (lastChar.trim() === "" && this.state.isTrackingStarted) {
+    //   this.stopTracking();
+    // }
+
+    const t = new RegExp('^@[a-zA-Z0-9]*$');
+    const lastKeyword = inputText.split(' ').pop()
+    if (t.test(inputText.split(' ').pop())) {
       this.startTracking(menIndex);
-    } else if (lastChar.trim() === "" && this.state.isTrackingStarted) {
+    } else {
       this.stopTracking();
     }
+
     this.previousChar = lastChar;
-    this.identifyKeyword(inputText);
+    this.identifyKeyword(lastKeyword);
   }
 
   getInitialAndRemainingStrings(inputText, menIndex) {
@@ -251,6 +262,8 @@ export class Editor extends React.Component {
       inputText,
       menIndex
     );
+
+    this.props.onTapSuggestion(user.id)
 
     const username = `@${user.username}`;
     const text = `${initialStr}${username} ${remStr}`;
@@ -330,6 +343,7 @@ export class Editor extends React.Component {
       formattedText.push(initialStr);
       const formattedMention = this.formatMentionNode(
         `@${men.username}`,
+        `${men.id}`,
         `${start}-${men.id}-${end}`
       );
       formattedText.push(formattedMention);
@@ -501,6 +515,20 @@ export class Editor extends React.Component {
     }
   };
 
+  openSuggestionsPanel() {
+    Animated.timing(this.state.suggestionRowHeight, {
+      toValue: 100, //height
+      duration: 300
+    }).start();
+  }
+
+  closeSuggestionsPanel() {
+    Animated.timing(this.state.suggestionRowHeight, {
+      toValue: 0,
+      duration: 300
+    }).start();
+  }
+
   render() {
     const { props, state } = this;
     const { editorStyles = {} } = props;
@@ -520,13 +548,21 @@ export class Editor extends React.Component {
         {props.renderMentionList ? (
           props.renderMentionList(mentionListProps)
         ) : (
-          <MentionList
-            list={props.list}
-            keyword={state.keyword}
-            isTrackingStarted={state.isTrackingStarted}
-            onSuggestionTap={this.onSuggestionTap}
-            editorStyles={editorStyles}
-          />
+          <Animated.View
+            style={[
+              styles.shadow,
+              { height: state.suggestionRowHeight },
+              editorStyles.mentionsListWrapper,
+            ]}
+          >
+            <MentionList
+              list={props.list}
+              keyword={state.keyword}
+              isTrackingStarted={state.isTrackingStarted}
+              onSuggestionTap={this.onSuggestionTap}
+              editorStyles={editorStyles}
+            />
+          </Animated.View>
         )}
         <View style={[styles.container, editorStyles.mainContainer]}>
           <ScrollView
@@ -538,7 +574,7 @@ export class Editor extends React.Component {
             }}
             style={[styles.editorContainer, editorStyles.editorContainer]}
           >
-            <View style={[{ height: this.state.editorHeight }]}>
+            <View style={[{ height: 72 }]}>
               <View
                 style={[
                   styles.formattedTextWrapper,
@@ -566,7 +602,7 @@ export class Editor extends React.Component {
                 ref={input => props.onRef && props.onRef(input)}
                 style={[styles.input, editorStyles.input]}
                 multiline
-                autoFocus
+                // autoFocus
                 numberOfLines={100}
                 name={"message"}
                 value={state.inputText}
@@ -578,6 +614,8 @@ export class Editor extends React.Component {
                 placeholder={state.placeholder}
                 onContentSizeChange={this.onContentSizeChange}
                 scrollEnabled={false}
+                autoCorrect={false}
+                {...this.props}
               />
             </View>
           </ScrollView>

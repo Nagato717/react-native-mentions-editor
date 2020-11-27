@@ -14,16 +14,17 @@ export default StyleSheet.create({
     maxHeight: 140
   },
   input: {
-    fontSize: 16,
-    color: "#000",
-    fontWeight: "400",
-    paddingHorizontal: 20,
-    minHeight: 40,
-    position: "absolute",
-    top: 0,
-    color: "transparent",
-    alignSelf: "stretch",
-    width: "100%"
+    flex: 1
+    // fontSize: 14,
+    // color: "#000",
+    // fontWeight: "400",
+    // paddingHorizontal: 20,
+    // minHeight: 40,
+    // position: "absolute",
+    // top: 0,
+    // color: "transparent",
+    // alignSelf: "stretch",
+    // width: "100%"
   },
   formattedTextWrapper: {
     minHeight: 40,
@@ -34,7 +35,7 @@ export default StyleSheet.create({
     width: "100%"
   },
   formattedText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "400"
   },
   mention: {
@@ -45,6 +46,13 @@ export default StyleSheet.create({
   },
   placeholderText: {
     color: "rgba(0, 0, 0, 0.1)",
-    fontSize: 16
+    fontSize: 14
+  },
+  shadow: {
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.5,
+    elevation: 2,
+    shadowRadius: 1
   }
 });
