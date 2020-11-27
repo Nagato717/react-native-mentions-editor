@@ -574,7 +574,7 @@ export class Editor extends React.Component {
             }}
             style={[styles.editorContainer, editorStyles.editorContainer]}
           >
-            <View style={[{ height: 72 }]}>
+            <View style={[{ height: this.state.editorHeight }]}>
               <View
                 style={[
                   styles.formattedTextWrapper,
