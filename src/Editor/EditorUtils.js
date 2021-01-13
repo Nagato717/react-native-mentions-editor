@@ -32,7 +32,7 @@ export const displayTextWithMentions = (inputText, formatMentionNode) => {
     } else {
       formattedText.push(retLine);
     }
-    formattedText.push("\n");
+    // formattedText.push("\n");
   });
   return formattedText;
 };
